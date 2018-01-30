@@ -11,6 +11,7 @@ import requests
 # services that implement specific features referring back to the single device management
 # service for their transient data.
 
+
 class BackendHandler(object):
     """
         Abstract class that represents an implementation backend on the internal middleware

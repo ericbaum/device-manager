@@ -1,22 +1,30 @@
 """ Assorted utils used throughout the service """
 
+import os
 import json
 import random
 from flask import make_response
 from pymongo import MongoClient
 import base64
 
+
 class CollectionManager:
-    def __init__(self, database, server='mongodb', port=27017):
+
+    def __init__(self, database, server='mongodb', port=27017, replica_set=None):
         self.client = None
         self.collection = None
         self.database = database
         self.server = server
         self.port = port
 
+        if replica_set:
+            self.replica_set = replica_set
+        else:
+            self.replica_set = os.environ.get('MONGO_REPLICA_SET', None)
+
     def getDB(self):
         if not self.client:
-            self.client = MongoClient(self.server, self.port)
+            self.client = MongoClient(self.server, self.port, replicaSet=self.replica_set)
         return self.client[self.database]
 
     def getCollection(self, collection):
